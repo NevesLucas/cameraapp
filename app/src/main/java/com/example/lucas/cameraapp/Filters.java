@@ -20,7 +20,8 @@ public class Filters extends Activity {
 
 
 
-
+//applies created filter onto bitmap and returns a new bitmap with filters applied
+    //BLUR FILTER DOES NOT REQUIRE THIS
     protected Bitmap process(Bitmap original, ColorMatrix colorMatrix) {
         Bitmap bitmap = Bitmap.createBitmap(
                 original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888);
@@ -32,6 +33,8 @@ public class Filters extends Activity {
 
         return bitmap;
     }
+    //creates color filter from rgb values between 0-255
+
     private ColorMatrix setColorFilter(float R,float G, float B) {
 
         float sr=(1-R)*.3086f;
@@ -40,17 +43,17 @@ public class Filters extends Activity {
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
                 sr+R, sr, sr, 0, 0,
-                sg, sg+G, sg, 0, 50,
-                sb, sb, sb+B,0,0,
-                0, 0, 0, 0, 1,
-                0, 0, 0, 0, 1
+                sg, sg+G, sg, 0, 0,
+                sb, sb, sb+B, 0, 0,
+                0,   0,    0, 1, 0,
+                0,   0,    0, 0, 1
         });
 
         return Cmat;
     }
 
 
-
+//make sepia color filter
     private ColorMatrix getSepiaColorMatrix() {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
@@ -63,7 +66,7 @@ public class Filters extends Activity {
 
         return colorMatrix;
     }
-
+//make grayscale image
     private ColorMatrix getGrayscaleColorMatrix() {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);

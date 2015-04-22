@@ -3,6 +3,7 @@ package com.example.lucas.cameraapp;
 /**
  * Created by Lucas on 4/10/2015.
  */
+//THIS IS OBSOLETE AT CURRENT APP REVISION, PLAN TO REMOVE IN FUTURE
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;

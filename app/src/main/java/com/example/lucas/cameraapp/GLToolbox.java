@@ -1,5 +1,5 @@
 package com.example.lucas.cameraapp;
-
+//THIS IS OBSOLETE AT CURRENT APP REVISION, PLAN TO REMOVE IN FUTURE
 
  /*
  * Copyright (C) 2014 The Android Open Source Project
