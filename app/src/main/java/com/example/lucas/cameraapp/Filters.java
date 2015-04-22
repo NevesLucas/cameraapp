@@ -33,25 +33,66 @@ public class Filters extends Activity {
 
         return bitmap;
     }
-    //creates color filter from rgb values between 0-255
+    //creates saturation filter where S is between 0 and 1.
+//EXPERIMENTAL may give unexpected results
+    private ColorMatrix setSaturationFilter( float S) {
 
-    private ColorMatrix setColorFilter(float R,float G, float B) {
-
-        float sr=(1-R)*.3086f;
-        float sg=(1-G)*.6094f;
-        float sb = (1-B)*.0820f;
+        float sr=(1-S)*.3086f;
+        float sg=(1-S)*.6094f;
+        float sb = (1-S)*.0820f;
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
-                sr+R, sr, sr, 0, 0,
-                sg, sg+G, sg, 0, 0,
-                sb, sb, sb+B, 0, 0,
-                0,   0,    0, 1, 0,
-                0,   0,    0, 0, 1
+                sr+S, sr, sr, 0, 0,
+                sg, sg+S, sg, 0, 0,
+                sb, sb, sb+S, 0, 0,
+                0,   0,    0, 1, 0
         });
 
         return Cmat;
     }
 
+//EXPERIMENTAL RGB should be between 0 and 1
+private ColorMatrix ChannelMixer(float R, float G, float B) {
+
+
+    ColorMatrix Cmat=  new ColorMatrix(new float[]{
+
+            R, 0, 0, 0, 0,
+            0, G, 0, 0, 0,
+            0, 0, B, 0, 0,
+            0, 0, 0, 1, 0,
+    });
+
+    return Cmat;
+}
+    //gets negative of image
+    private ColorMatrix invert() {
+
+
+        ColorMatrix Cmat=  new ColorMatrix(new float[]{
+
+                -1, 0, 0, 0, 255,
+                0, -1, 0, 0, 255,
+                0, 0, -1, 0, 255,
+                0, 0,  0, 1,   0,
+        });
+
+        return Cmat;
+    }
+    //adjusts the contrast and brightness of the image
+    private ColorMatrix setContrastBrightness( float C,float B) {
+
+
+        ColorMatrix Cmat=  new ColorMatrix(new float[]{
+
+                C, 0, 0, 0, B,
+                0, C, 0, 0, B,
+                0, 0, C, 0, B,
+                0, 0, 0, 1, 0,
+        });
+
+        return Cmat;
+    }
 
 //make sepia color filter
     private ColorMatrix getSepiaColorMatrix() {
@@ -73,7 +114,7 @@ public class Filters extends Activity {
         return colorMatrix;
     }
 
-    //blurring effect
+    //blurring effect input radius for intensity of blurring effect
     protected Bitmap blur(android.graphics.Bitmap original, float radius) {
         Bitmap bitmap = android.graphics.Bitmap.createBitmap(
                 original.getWidth(), original.getHeight(),
