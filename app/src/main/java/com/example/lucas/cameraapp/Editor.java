@@ -67,7 +67,7 @@ public class Editor extends Activity {
         adjustSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-               //If first method call image editing functions here
+                //If first method call image editing functions here
                 //pass edited Bitmap
             }
 
@@ -94,7 +94,7 @@ public class Editor extends Activity {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle(getString(R.string.edit_options_title));
         menu.add(0, v.getId(), 0, getString(R.string.color));
-       // menu.add(0, v.getId(), 0, getString(R.string.opacity));
+        // menu.add(0, v.getId(), 0, getString(R.string.opacity));
         //menu.add(0, v.getId(), 0, getString(R.string.temperature));
         menu.add(0, v.getId(), 0, getString(R.string.tint));
         menu.add(0, v.getId(), 0, getString(R.string.contrast));
