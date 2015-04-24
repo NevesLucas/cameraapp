@@ -35,7 +35,7 @@ public class Filters extends Activity {
     }
     //creates saturation filter where S is between 0 and 1.
 //EXPERIMENTAL may give unexpected results
-    private ColorMatrix setSaturationFilter( float S) {
+    private Bitmap SaturationFilter(Bitmap original, float S) {
 
         float sr=(1-S)*.3086f;
         float sg=(1-S)*.6094f;
@@ -48,11 +48,11 @@ public class Filters extends Activity {
                 0,   0,    0, 1, 0
         });
 
-        return Cmat;
+        return this.process(original,Cmat);
     }
 
 //EXPERIMENTAL RGB should be between 0 and 1
-private ColorMatrix ChannelMixer(float R, float G, float B) {
+private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
 
 
     ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -63,10 +63,10 @@ private ColorMatrix ChannelMixer(float R, float G, float B) {
             0, 0, 0, 1, 0,
     });
 
-    return Cmat;
+    return this.process(original,Cmat);
 }
     //gets negative of image
-    private ColorMatrix invert() {
+    private Bitmap invert(Bitmap original) {
 
 
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -77,10 +77,10 @@ private ColorMatrix ChannelMixer(float R, float G, float B) {
                 0, 0,  0, 1,   0,
         });
 
-        return Cmat;
+        return this.process(original,Cmat);
     }
     //adjusts the contrast and brightness of the image
-    private ColorMatrix setContrastBrightness( float C,float B) {
+    private Bitmap ContrastBrightness(Bitmap original, float C,float B) {
 
 
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -91,11 +91,11 @@ private ColorMatrix ChannelMixer(float R, float G, float B) {
                 0, 0, 0, 1, 0,
         });
 
-        return Cmat;
+        return this.process(original,Cmat);
     }
 
 //make sepia color filter
-    private ColorMatrix getSepiaColorMatrix() {
+    private Bitmap SepiaColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
 
@@ -105,13 +105,13 @@ private ColorMatrix ChannelMixer(float R, float G, float B) {
         // Convert to grayscale, then apply brown color
         colorMatrix.postConcat(colorScale);
 
-        return colorMatrix;
+        return this.process(original,colorMatrix);
     }
 //make grayscale image
-    private ColorMatrix getGrayscaleColorMatrix() {
+    private Bitmap GrayscaleColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
-        return colorMatrix;
+        return this.process(original,colorMatrix);
     }
 
     //blurring effect input radius for intensity of blurring effect

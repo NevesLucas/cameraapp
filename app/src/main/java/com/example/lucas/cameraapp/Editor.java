@@ -88,15 +88,18 @@ public class Editor extends Activity {
 
     //I couldn't remember which editing features we were using so feel free to add/delete as necessary
     //Remember to also adjust if statment in onContextItemSelected
+    //Lucas-- made some adjustments here to match filters, still working on tint TODO
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle(getString(R.string.edit_options_title));
         menu.add(0, v.getId(), 0, getString(R.string.color));
-        menu.add(0, v.getId(), 0, getString(R.string.opacity));
-        menu.add(0, v.getId(), 0, getString(R.string.temperature));
+       // menu.add(0, v.getId(), 0, getString(R.string.opacity));
+        //menu.add(0, v.getId(), 0, getString(R.string.temperature));
         menu.add(0, v.getId(), 0, getString(R.string.tint));
         menu.add(0, v.getId(), 0, getString(R.string.contrast));
+        menu.add(0, v.getId(), 0, getString(R.string.brightness));
+        menu.add(0, v.getId(), 0, getString(R.string.blurring));
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -106,19 +109,22 @@ public class Editor extends Activity {
             adjustSlider.setMax(100);
             adjustSlider.setProgress(50);
         }
+        /*
         else if (item.getTitle() == getString(R.string.opacity)) {
             instructionsTextView.setVisibility(View.INVISIBLE);
             adjustSlider.setVisibility(View.VISIBLE);
             adjustSlider.setMax(100);
             adjustSlider.setProgress(50);
         }
+
         else if (item.getTitle() == getString(R.string.temperature)) {
             instructionsTextView.setVisibility(View.INVISIBLE);
             adjustSlider.setVisibility(View.VISIBLE);
             adjustSlider.setMax(100);
             adjustSlider.setProgress(50);
         }
-        else if (item.getTitle() == getString(R.string.temperature)) {
+        */
+        else if (item.getTitle() == getString(R.string.brightness)) {
             instructionsTextView.setVisibility(View.INVISIBLE);
             adjustSlider.setVisibility(View.VISIBLE);
             adjustSlider.setMax(100);
@@ -131,6 +137,13 @@ public class Editor extends Activity {
             adjustSlider.setProgress(50);
         }
         else if (item.getTitle() == getString(R.string.contrast)) {
+            instructionsTextView.setVisibility(View.INVISIBLE);
+            adjustSlider.setVisibility(View.VISIBLE);
+            adjustSlider.setMax(100);
+            adjustSlider.setProgress(50);
+        }
+
+        else if (item.getTitle() == getString(R.string.blurring)) {
             instructionsTextView.setVisibility(View.INVISIBLE);
             adjustSlider.setVisibility(View.VISIBLE);
             adjustSlider.setMax(100);
