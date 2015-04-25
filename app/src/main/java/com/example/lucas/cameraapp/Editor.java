@@ -24,6 +24,7 @@ import java.util.Calendar;
 
 
 public class Editor extends Activity {
+
     public static final String TAG = Editor.class.getSimpleName();
     private SeekBar adjustSlider;
     private Button saveButton;
@@ -123,7 +124,7 @@ public class Editor extends Activity {
             adjustSlider.setMax(100);
             adjustSlider.setProgress(50);
         }
-        */
+*/
         else if (item.getTitle() == getString(R.string.brightness)) {
             instructionsTextView.setVisibility(View.INVISIBLE);
             adjustSlider.setVisibility(View.VISIBLE);
@@ -180,4 +181,5 @@ public class Editor extends Activity {
             return null;
         }
     }
+
 }

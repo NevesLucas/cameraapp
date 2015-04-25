@@ -120,7 +120,7 @@ public Bitmap SepiaColor(Bitmap original) {
                 original.getWidth(), original.getHeight(),
                 android.graphics.Bitmap.Config.ARGB_8888);
 
-        RenderScript RenS = RenderScript.create(this);
+        RenderScript RenS =  RenderScript.create(this);
 
         Allocation allocIn = Allocation.createFromBitmap(RenS, original);
         Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
