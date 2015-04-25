@@ -35,7 +35,7 @@ public class Filters extends Activity {
     }
     //creates saturation filter where S is between 0 and 1.
 //EXPERIMENTAL may give unexpected results
-    private Bitmap SaturationFilter(Bitmap original, float S) {
+    public Bitmap SaturationFilter(Bitmap original, float S) {
 
         float sr=(1-S)*.3086f;
         float sg=(1-S)*.6094f;
@@ -52,7 +52,7 @@ public class Filters extends Activity {
     }
 
 //EXPERIMENTAL RGB should be between 0 and 1
-private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
+public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
 
 
     ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -66,7 +66,7 @@ private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
     return this.process(original,Cmat);
 }
     //gets negative of image
-    private Bitmap invert(Bitmap original) {
+    public Bitmap invert(Bitmap original) {
 
 
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -80,7 +80,7 @@ private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
         return this.process(original,Cmat);
     }
     //adjusts the contrast and brightness of the image
-    private Bitmap ContrastBrightness(Bitmap original, float C,float B) {
+    public Bitmap ContrastBrightness(Bitmap original, float C,float B) {
 
 
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
@@ -95,7 +95,7 @@ private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
     }
 
 //make sepia color filter
-    private Bitmap SepiaColor(Bitmap original) {
+public Bitmap SepiaColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
 
@@ -108,12 +108,12 @@ private Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
         return this.process(original,colorMatrix);
     }
 //make grayscale image
-    private Bitmap GrayscaleColor(Bitmap original) {
+    public Bitmap GrayscaleColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
         return this.process(original,colorMatrix);
     }
-
+     //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
     protected Bitmap blur(android.graphics.Bitmap original, float radius) {
         Bitmap bitmap = android.graphics.Bitmap.createBitmap(
