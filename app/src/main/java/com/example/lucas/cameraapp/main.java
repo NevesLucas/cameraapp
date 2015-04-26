@@ -1,7 +1,6 @@
 package com.example.lucas.cameraapp;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,24 +8,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 
 
 public class main extends Activity{
 
-    private static final String CAMERA_LOG = "camera";
-    private Uri imageUri;
+    public static final String TAG_PROCEED = "Proceed to next activity, takePhotoID is 1, uploadPhotoID is 2";
+    private static final String CAMERA_LOG = "camera activated";
+    protected static Uri capturedImageUri = null;
     private static int TAKE_PHOTO = 1;
     private static int UPLOAD_PHOTO = 2;
 
@@ -34,7 +33,6 @@ public class main extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Button uploadPhoto = (Button) findViewById(R.id.uploadPhoto);
         Button takePhoto = (Button) findViewById(R.id.takePhoto);
@@ -45,7 +43,7 @@ public class main extends Activity{
                 Intent uploadIntent = new Intent();
                 uploadIntent.setType("image/*");
                 uploadIntent.setAction(uploadIntent.ACTION_GET_CONTENT);
-                startActivityForResult(uploadIntent.createChooser(uploadIntent,"Select a Photo"),UPLOAD_PHOTO);
+                startActivityForResult(uploadIntent.createChooser(uploadIntent, "Select a Photo"), UPLOAD_PHOTO);
 
             }
         });
@@ -62,56 +60,59 @@ public class main extends Activity{
     };
 
     private void takePhoto(View v){
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-        df.format("yyyy-MM-dd hh:mm:ss", new java.util.Date()).toString();
-        String photoName = "blur_pic.jpg" + df;
-        Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),photoName);
-        imageUri = Uri.fromFile(photo);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-        startActivityForResult(cameraIntent,TAKE_PHOTO);
+        Calendar calendar = Calendar.getInstance();
+        File file = new File(Environment.getExternalStorageDirectory(), (calendar.getTimeInMillis()+".jpg"));
+        if (!file.exists()){
+            try{
+                file.createNewFile();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }else{
+            file.delete();
+            try{
+                file.createNewFile();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        capturedImageUri = Uri.fromFile(file);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+        startActivityForResult(takePhotoIntent, TAKE_PHOTO);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
-        super.onActivityResult(requestCode,resultCode,intent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
 
-        if(resultCode == Activity.RESULT_OK){
-            Intent resultActivity = new Intent(main.this,photoedit.class);
-            startActivity(resultActivity);
-            Uri selectedImage = imageUri;
-            getContentResolver().notifyChange(selectedImage,null);
-
-            ImageView imageView = (ImageView) findViewById(R.id.photoInEditor);
-            ContentResolver cr = getContentResolver();
-            Bitmap bitmap;
-
-            try{
-                bitmap = MediaStore.Images.Media.getBitmap(cr,selectedImage);
-                imageView.setImageBitmap(bitmap);
-                // Toast.makeText(main.this,selectedImage.toString(),Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
-                Log.e(CAMERA_LOG,e.toString());
-            }
-        }else if (resultCode == Activity.RESULT_OK && requestCode == UPLOAD_PHOTO) {
-            Uri gallaryImageUri = intent.getData();
+        if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO) {
+            Intent passImageToNextActivity = new Intent(main.this, photoedit.class);
+            passImageToNextActivity.putExtra(TAG_PROCEED,TAKE_PHOTO);
+            startActivity(passImageToNextActivity);
+        } else if (resultCode == Activity.RESULT_OK && requestCode == UPLOAD_PHOTO) {
+            Uri galleryImageUri = intent.getData();
+            Intent passImageToNextActivity = new Intent(main.this, photoedit.class);
             InputStream inputStream;
             try {
-                inputStream = getContentResolver().openInputStream(gallaryImageUri);
+                // a stream of data from the file
+                inputStream = getContentResolver().openInputStream(galleryImageUri);
                 // get bitmap from stream
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                Bitmap selectedBMP = BitmapFactory.decodeStream(inputStream);
+                passImageToNextActivity.putExtra(TAG_PROCEED,UPLOAD_PHOTO);
+                passImageToNextActivity.putExtra("UserSelectedImage", selectedBMP);
+                startActivity(passImageToNextActivity);
 
-                ((ImageView) findViewById(R.id.photoInEditor)).setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Unable to Open Image", Toast.LENGTH_LONG).show();
+
             }
-            // ImageView editorImage = (ImageView) findViewById(R.id.photoInEditor);
-            //editorImage.setImageURI(intent.getData());
-            // Intent photoEditActivity = new Intent(main.this, photoedit.class);
-            // startActivity(photoEditActivity);
+
         }
     }
+
+
 
 
 

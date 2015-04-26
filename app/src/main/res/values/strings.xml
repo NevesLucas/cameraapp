@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">camera app</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Blur</string>
     <string name="action_settings">Settings</string>
+    <!-- Main.xml Strings -->
+    <string name="welcomeText">Welcome to Blur</string>
+    <string name="uploadPhoto">Upload a Photo</string>
+
 </resources>

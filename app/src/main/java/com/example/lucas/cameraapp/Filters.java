@@ -1,26 +1,15 @@
 package com.example.lucas.cameraapp;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
-
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 
-/**
- * Created by Lucas on 4/10/2015.
- */
-public class Filters extends Activity {
+public class Filters extends photoedit {
 
-
-
-//applies created filter onto bitmap and returns a new bitmap with filters applied
+    //applies created filter onto bitmap and returns a new bitmap with filters applied
     //BLUR FILTER DOES NOT REQUIRE THIS
     protected Bitmap process(Bitmap original, ColorMatrix colorMatrix) {
         Bitmap bitmap = Bitmap.createBitmap(
@@ -51,20 +40,20 @@ public class Filters extends Activity {
         return this.process(original,Cmat);
     }
 
-//EXPERIMENTAL RGB should be between 0 and 1
-public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
+    //EXPERIMENTAL RGB should be between 0 and 1
+    public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
 
 
-    ColorMatrix Cmat=  new ColorMatrix(new float[]{
+        ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
-            R, 0, 0, 0, 0,
-            0, G, 0, 0, 0,
-            0, 0, B, 0, 0,
-            0, 0, 0, 1, 0,
-    });
+                R, 0, 0, 0, 0,
+                0, G, 0, 0, 0,
+                0, 0, B, 0, 0,
+                0, 0, 0, 1, 0,
+        });
 
-    return this.process(original,Cmat);
-}
+        return this.process(original,Cmat);
+    }
     //gets negative of image
     public Bitmap invert(Bitmap original) {
 
@@ -94,8 +83,8 @@ public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
         return this.process(original,Cmat);
     }
 
-//make sepia color filter
-public Bitmap SepiaColor(Bitmap original) {
+    //make sepia color filter
+    public Bitmap SepiaColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
 
@@ -107,13 +96,17 @@ public Bitmap SepiaColor(Bitmap original) {
 
         return this.process(original,colorMatrix);
     }
-//make grayscale image
+    //make grayscale image
     public Bitmap GrayscaleColor(Bitmap original) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(0);
         return this.process(original,colorMatrix);
     }
-     //THIS FILTER HAS A BUG TODO
+
+
+
+    /*
+    //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
     protected Bitmap blur(android.graphics.Bitmap original, float radius) {
         Bitmap bitmap = android.graphics.Bitmap.createBitmap(
@@ -137,6 +130,8 @@ public Bitmap SepiaColor(Bitmap original) {
 
         return bitmap;
     }
-
+*/
 
 }
+
+
