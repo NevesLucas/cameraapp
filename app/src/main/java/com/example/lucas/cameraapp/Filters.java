@@ -13,7 +13,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 public class Filters extends Activity {
-
+private boolean doubleblur=false;
     //applies created filter onto bitmap and returns a new bitmap with filters applied
     //BLUR FILTER DOES NOT REQUIRE THIS
     protected Bitmap process(Bitmap original, ColorMatrix colorMatrix) {
@@ -113,27 +113,23 @@ public class Filters extends Activity {
 
     //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
-    protected Bitmap blur(Bitmap original, float radius) {
+    protected Bitmap blur(Bitmap original, int multi) {
+       Bitmap temp=original;
 
-        Bitmap bitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), original.getConfig());
-
-
-        RenderScript RenS =  RenderScript.create(this);
-
-        Allocation allocIn = Allocation.createFromBitmap(RenS, original, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
-        Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
-
-        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
-
-        blur.setInput(allocIn);
-        blur.setRadius(radius);
-        blur.forEach(allocOut);
-
-        allocOut.copyTo(bitmap);
-
-        RenS.destroy();
-
-        return bitmap;
+        for(int i=0;i<multi;i++){
+            Bitmap bitmap = Bitmap.createBitmap(temp.getWidth(), temp.getHeight(), temp.getConfig());
+            RenderScript RenS = RenderScript.create(this);
+            Allocation allocIn = Allocation.createFromBitmap(RenS, temp, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
+            Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
+            blur.setInput(allocIn);
+            blur.setRadius(25.0f);
+            blur.forEach(allocOut);
+            allocOut.copyTo(bitmap);
+            RenS.destroy();
+            temp=bitmap;
+        }
+        return temp;
     }
 
 
