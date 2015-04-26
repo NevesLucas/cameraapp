@@ -123,7 +123,7 @@ private boolean doubleblur=false;
             Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
             ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
             blur.setInput(allocIn);
-            blur.setRadius(25.0f);
+            blur.setRadius(20.0f);
             blur.forEach(allocOut);
             allocOut.copyTo(bitmap);
             RenS.destroy();
