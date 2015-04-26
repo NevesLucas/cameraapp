@@ -39,7 +39,7 @@ public class photoedit extends Filters {
                 image = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),main.capturedImageUri);
                 ImageView imageTobeEdited = (ImageView) findViewById(R.id.photoInEditor);
                 imageTobeEdited.setImageBitmap(image);
-            edited=invert(image);
+            edited=blur(image,20.0f);
                 imageTobeEdited.setImageBitmap(edited);
 
             } catch (FileNotFoundException e) {

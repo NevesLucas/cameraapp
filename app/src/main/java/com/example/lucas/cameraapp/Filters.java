@@ -7,6 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 
 public class Filters extends Activity {
 
@@ -106,7 +110,7 @@ public class Filters extends Activity {
 
 
 
-    /*
+
     //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
     protected Bitmap blur(android.graphics.Bitmap original, float radius) {
@@ -131,7 +135,7 @@ public class Filters extends Activity {
 
         return bitmap;
     }
-*/
+
 
 }
 
