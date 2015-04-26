@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id = "@+id/photoInEditor"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_above="@+id/sliderBar"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        />
+
+    <SeekBar
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/sliderBar"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="127dp"
+        android:max="@integer/abc_config_activityDefaultDur"
+        android:indeterminate="false"
+        android:progress="@integer/abc_max_action_buttons" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/buttonSave"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <HorizontalScrollView
+        android:layout_width="380dp"
+        android:layout_height="70dp"
+        android:id="@+id/horizontalScrollView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        >
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width = "wrap_content"
+            >
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id = "@+id/buttonBrightness"
+                    android:text="Brightness"
+                    android:layout_margin="@dimen/abc_button_padding_horizontal_material"
+                    android:onClick="selectFilters"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id = "@+id/buttonSaturationFilter"
+                    android:text="Saturation"
+                    android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"
+                    android:onClick="selectFilters"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id = "@+id/buttonChannelMixer"
+                    android:text="Channel Mixer"
+                    android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"
+                    android:onClick="selectFilters"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id = "@+id/buttonBlur"
+                    android:text="Blur"
+                    android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"
+                    android:onClick="selectFilters"/>
+            </RadioGroup>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+</RelativeLayout>
