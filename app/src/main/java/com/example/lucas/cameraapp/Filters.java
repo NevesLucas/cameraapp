@@ -1,13 +1,14 @@
 package com.example.lucas.cameraapp;
 
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 
-public class Filters extends photoedit {
+public class Filters extends Activity {
 
     //applies created filter onto bitmap and returns a new bitmap with filters applied
     //BLUR FILTER DOES NOT REQUIRE THIS

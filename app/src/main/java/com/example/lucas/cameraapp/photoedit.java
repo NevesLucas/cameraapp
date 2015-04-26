@@ -18,9 +18,10 @@ package com.example.lucas.cameraapp;
 /**
  * Created by Zeming Wu on 4/25/2015.
  */
-public class photoedit extends Activity {
+public class photoedit extends Filters {
 
     private Bitmap image; // this is the bitmap file of the image that needs to be edited
+    private Bitmap edited;
     private int intensity;
     private SeekBar slider;
 
@@ -38,6 +39,9 @@ public class photoedit extends Activity {
                 image = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),main.capturedImageUri);
                 ImageView imageTobeEdited = (ImageView) findViewById(R.id.photoInEditor);
                 imageTobeEdited.setImageBitmap(image);
+            edited=invert(image);
+                imageTobeEdited.setImageBitmap(edited);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e){
@@ -79,22 +83,27 @@ public class photoedit extends Activity {
 
 
     // applying  filters
-    public void selectFilters(View v){
+    public Bitmap selectFilters(View v,float value,float C,Float B, Bitmap original){
         boolean checked = ((RadioButton) v).isChecked();
+        Bitmap filtered;
         switch (v.getId()){
             case R.id.buttonSaturationFilter:
-                //TODO: implement the filter
-                break;
+                filtered = SaturationFilter(original,value);
+                return filtered;
+
             case R.id.buttonBlur:
                 //TODO: implement the filter
                 break;
             case R.id.buttonBrightness:
-                //TODO: implement the filter
-                break;
+                filtered = ContrastBrightness( original, C, B);
+                return filtered;
+
             case R.id.buttonChannelMixer:
-                //TODO: implement the filter
-                break;
+                filtered=invert(original);
+                return filtered;
+
         }
+        return original;
     }
 
 
