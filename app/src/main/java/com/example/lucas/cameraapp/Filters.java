@@ -113,14 +113,14 @@ public class Filters extends Activity {
 
     //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
-    protected Bitmap blur(android.graphics.Bitmap original, float radius) {
-        Bitmap bitmap = android.graphics.Bitmap.createBitmap(
-                original.getWidth(), original.getHeight(),
-                android.graphics.Bitmap.Config.ARGB_8888);
+    protected Bitmap blur(Bitmap original, float radius) {
+
+        Bitmap bitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), original.getConfig());
+
 
         RenderScript RenS =  RenderScript.create(this);
 
-        Allocation allocIn = Allocation.createFromBitmap(RenS, original);
+        Allocation allocIn = Allocation.createFromBitmap(RenS, original, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
         Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
 
         ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
@@ -135,6 +135,7 @@ public class Filters extends Activity {
 
         return bitmap;
     }
+
 
 
 }
