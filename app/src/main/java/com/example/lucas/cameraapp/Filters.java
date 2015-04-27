@@ -109,7 +109,7 @@ public class Filters extends Activity {
     }
 
     //blurring effect input radius for intensity of blurring effect
-    protected Bitmap blur(Bitmap original, int multi) {
+    protected Bitmap Blur(Bitmap original, int multi) {
        Bitmap temp=original;
 
         for(int i=0;i<multi;i++){

@@ -5,4 +5,17 @@
     <string name="welcomeText">Welcome to Blur</string>
     <string name="uploadPhoto">Upload a Photo</string>
 
+    <string name="promptSpinner">Pick a Filter</string>
+
+    <string-array name="filters">
+        <item>Select a Filter</item>
+        <item>Blur</item>
+        <item>Channel Mixer</item>
+        <item>Contrast and Brightness</item>
+        <item>Saturation</item>
+        <item>SepiaColor</item>
+        <item>Invert</item>
+        <item>Grey Scale</item>
+    </string-array>
+
 </resources>
