@@ -2,6 +2,7 @@ package com.example.lucas.cameraapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -37,13 +38,13 @@ public class main extends Activity{
         Button uploadPhoto = (Button) findViewById(R.id.uploadPhoto);
         Button takePhoto = (Button) findViewById(R.id.takePhoto);
 
-        uploadPhoto.setOnClickListener(new OnClickListener() {
+        uploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent uploadIntent = new Intent();
-                uploadIntent.setType("image/*");
-                uploadIntent.setAction(uploadIntent.ACTION_GET_CONTENT);
-                startActivityForResult(uploadIntent.createChooser(uploadIntent, "Select a Photo"), UPLOAD_PHOTO);
+                Intent uploadIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(uploadIntent,UPLOAD_PHOTO);
 
             }
         });
@@ -90,25 +91,36 @@ public class main extends Activity{
             Intent passImageToNextActivity = new Intent(main.this, photoedit.class);
             passImageToNextActivity.putExtra(TAG_PROCEED,TAKE_PHOTO);
             startActivity(passImageToNextActivity);
+
+
         } else if (resultCode == Activity.RESULT_OK && requestCode == UPLOAD_PHOTO) {
-            Uri galleryImageUri = intent.getData();
+
+            //try {
+            Uri selectedImage = intent.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
             Intent passImageToNextActivity = new Intent(main.this, photoedit.class);
-            InputStream inputStream;
-            try {
-                // a stream of data from the file
-                inputStream = getContentResolver().openInputStream(galleryImageUri);
-                // get bitmap from stream
-                Bitmap selectedBMP = BitmapFactory.decodeStream(inputStream);
+
+
+
+                Bitmap selectedBMP = BitmapFactory.decodeFile(picturePath);
                 passImageToNextActivity.putExtra(TAG_PROCEED,UPLOAD_PHOTO);
                 passImageToNextActivity.putExtra("UserSelectedImage", selectedBMP);
                 startActivity(passImageToNextActivity);
 
-            } catch (FileNotFoundException e) {
+           /* } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Unable to Open Image", Toast.LENGTH_LONG).show();
 
             }
-
+*/
         }
     }
 

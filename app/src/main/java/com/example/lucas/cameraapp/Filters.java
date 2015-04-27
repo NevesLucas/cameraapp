@@ -13,7 +13,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 public class Filters extends Activity {
-private boolean doubleblur=false;
+
     //applies created filter onto bitmap and returns a new bitmap with filters applied
     //BLUR FILTER DOES NOT REQUIRE THIS
     protected Bitmap process(Bitmap original, ColorMatrix colorMatrix) {
@@ -108,10 +108,6 @@ private boolean doubleblur=false;
         return this.process(original,colorMatrix);
     }
 
-
-
-
-    //THIS FILTER HAS A BUG TODO
     //blurring effect input radius for intensity of blurring effect
     protected Bitmap blur(Bitmap original, int multi) {
        Bitmap temp=original;
@@ -123,7 +119,7 @@ private boolean doubleblur=false;
             Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
             ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
             blur.setInput(allocIn);
-            blur.setRadius(20.0f);
+            blur.setRadius(15.0f);
             blur.forEach(allocOut);
             allocOut.copyTo(bitmap);
             RenS.destroy();
