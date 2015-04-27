@@ -309,12 +309,14 @@ public class photoedit extends Filters {
                 hide();
                 edited = selectFilters(parameter1,parameter2,parameter3,image);
                 display.setImageBitmap(edited);
+                break;
             case "Blur":
                 hide();
                 findViewById(R.id.sliderBar2).setVisibility(View.VISIBLE);
                 findViewById(R.id.tv_sliderBar2).setVisibility(View.VISIBLE);
                 edited = selectFilters(parameter1,parameter2,parameter3,image);
                 display.setImageBitmap(edited);
+                break;
         }
     }
     public void hide(){
