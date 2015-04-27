@@ -31,24 +31,30 @@ public class Filters extends Activity {
 //EXPERIMENTAL may give unexpected results
     public Bitmap SaturationFilter(Bitmap original, float S) {
 
-        float sr=(1-S)*.3086f;
-        float sg=(1-S)*.6094f;
-        float sb = (1-S)*.0820f;
-        ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
-                sr+S, sr, sr, 0, 0,
-                sg, sg+S, sg, 0, 0,
-                sb, sb, sb+S, 0, 0,
-                0,   0,    0, 1, 0
-        });
+        float x = 1+((S > 0) ? 3 * S / 100 : S / 100);
+        float lumR = 0.3086f;
+        float lumG = 0.6094f;
+        float lumB = 0.0820f;
+
+        float[] mat = new float[]
+                {
+                        lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
+                        0,0,0,1,0,
+                        0,0,0,0,1
+                };
+       ColorMatrix Cmat= new ColorMatrix(mat);
 
         return this.process(original,Cmat);
     }
 
     //EXPERIMENTAL RGB should be between 0 and 1
     public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
-
-
+        R=R/75.0f;
+        G=G/75.0f;
+        B=B/75.0f;
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
                 R, 0, 0, 0, 0,
@@ -76,6 +82,8 @@ public class Filters extends Activity {
     //adjusts the contrast and brightness of the image
     public Bitmap ContrastBrightness(Bitmap original, float C,float B) {
 
+       C=C/75.0f;
+       B=B-75f;
 
         ColorMatrix Cmat=  new ColorMatrix(new float[]{
 
@@ -111,7 +119,7 @@ public class Filters extends Activity {
     //blurring effect input radius for intensity of blurring effect
     protected Bitmap Blur(Bitmap original, int multi) {
        Bitmap temp=original;
-
+          multi = multi/5;
         for(int i=0;i<multi;i++){
             Bitmap bitmap = Bitmap.createBitmap(temp.getWidth(), temp.getHeight(), temp.getConfig());
             RenderScript RenS = RenderScript.create(this);
@@ -119,7 +127,7 @@ public class Filters extends Activity {
             Allocation allocOut = Allocation.createFromBitmap(RenS, bitmap);
             ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(RenS, Element.U8_4(RenS));
             blur.setInput(allocIn);
-            blur.setRadius(15.0f);
+            blur.setRadius(10.0f);
             blur.forEach(allocOut);
             allocOut.copyTo(bitmap);
             RenS.destroy();
