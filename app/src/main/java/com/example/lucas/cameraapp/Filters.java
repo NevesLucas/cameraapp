@@ -32,7 +32,7 @@ public class Filters extends Activity {
     public Bitmap SaturationFilter(Bitmap original, float S) {
 
 
-        float x = 1+((S > 0) ? 3 * S / 100 : S / 100);
+        float x = ((S > 0) ? 3 * S / 10 : S / 10);
         float lumR = 0.3086f;
         float lumG = 0.6094f;
         float lumB = 0.0820f;
