@@ -6,6 +6,7 @@
         android:id = "@+id/photoInEditor"
         android:layout_width="400dp"
         android:layout_height="400dp"
+        android:scaleType="fitCenter"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         />
