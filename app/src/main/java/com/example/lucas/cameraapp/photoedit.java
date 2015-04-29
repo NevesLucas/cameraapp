@@ -2,6 +2,8 @@ package com.example.lucas.cameraapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -259,13 +261,13 @@ public class photoedit extends Filters {
         //get path to external storage (SD card)
      //   String iconsStoragePath = Environment.getExternalStorageDirectory() + "/myAppDir/myImages/";
         try {
-            File sdIconStorageDir =storeImageHelp();
+            File sdIconStorageDir = storeImageHelp();
 
-        //create storage directories, if they don't exist
-            sdIconStorageDir.mkdirs();
+            //create storage directories, if they don't exist
+            //sdIconStorageDir.mkdirs();
 
-            String filePath = mCurrentPhotoPath;
-            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+            //could put this code in the async task if task works
+            FileOutputStream fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
 
             BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 
@@ -276,7 +278,13 @@ public class photoedit extends Filters {
             bos.close();
             fileOutputStream.flush();
             fileOutputStream.close();
+
+            //Executes async task
+            new UpdateGallery().execute(sdIconStorageDir);
+
             Toast.makeText(getApplicationContext(),"Image saved",Toast.LENGTH_LONG).show();
+
+
         } catch (FileNotFoundException e) {
             Log.w("TAG", "Error saving image file: " + e.getMessage());
             return false;
@@ -288,7 +296,29 @@ public class photoedit extends Filters {
         return true;
     }
 
+    //TODO test this method
+    //function to update photo gallery. In a separate thread
+    private class UpdateGallery extends AsyncTask<File, Integer, Long> {
+        protected Long doInBackground(File... photos) {
+            //could put other code to save here
+            MediaScannerConnection.scanFile(
+                    photoedit.this, new String[] {photos.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
 
+                        }
+                    });
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+        protected void onPostExecute(Long result) {
+
+        }
+    }
 
 // helper function to hide/show slider bars
     public void showSliderBars(String filterID){
