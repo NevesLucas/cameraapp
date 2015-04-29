@@ -2,6 +2,7 @@ package com.example.lucas.cameraapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -43,12 +44,6 @@ public class photoedit extends Filters {
     private ArrayAdapter<CharSequence> adapter;
     private String selectedFilterName;
 
-
-
-
-
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photoedit);
@@ -79,7 +74,6 @@ public class photoedit extends Filters {
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
         }
-
 
 // SeekBar1, the slider, to get the integer as intensity parameter for filters
         slider1 = (SeekBar) findViewById(R.id.sliderBar1);
@@ -136,14 +130,23 @@ public class photoedit extends Filters {
                     case "Saturation":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
+                        slider1.setProgress(76);
+                        slider2.setProgress(76);
+                        slider3.setProgress(76);
                         break;
                     case "Contrast and Brightness":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
+                        slider1.setProgress(76);
+                        slider2.setProgress(76);
+                        slider3.setProgress(76);
                         break;
                     case "Channel Mixer":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
+                        slider1.setProgress(76);
+                        slider2.setProgress(76);
+                        slider3.setProgress(76);
                         break;
                     case "Blur":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
@@ -171,16 +174,17 @@ public class photoedit extends Filters {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                tv3.setText(String.valueOf((int)(parameter3))+"/" + slider3.getMax());
+                tv3.setText(String.valueOf((int) (parameter3)) + "/" + slider3.getMax());
                 //Toast.makeText(getApplicationContext(), String.valueOf(parameter3) + "/" + slider3.getMax(), Toast.LENGTH_SHORT).show();
-                switch (selectedFilterName){
+                switch (selectedFilterName) {
                     case "Channel Mixer":
-                        edited = selectFilters(parameter1,parameter2,parameter3,image);
+                        edited = selectFilters(parameter1, parameter2, parameter3, image);
                         ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                         display.setImageBitmap(edited);
                 }
             }
         });
+
 
 
 // Spinner: choose filters
@@ -203,9 +207,6 @@ public class photoedit extends Filters {
         });
 
 
-
-
-
 // SAVE Button
         Button save = (Button) findViewById(R.id.buttonSave);
         save.setOnClickListener(new View.OnClickListener() {
@@ -225,6 +226,7 @@ public class photoedit extends Filters {
             public void onClick(View v) {
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
+                edited = image;
             }
         });
 
@@ -352,11 +354,5 @@ public class photoedit extends Filters {
         }
         return original;
     }
-
-
-
-
-
-
 
 }
