@@ -134,24 +134,24 @@ public class photoedit extends Filters {
                     case "Saturation":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
+                        /*slider1.setProgress(76);
                         slider2.setProgress(76);
                         slider3.setProgress(76);
-                        break;
+                       */ break;
                     case "Contrast and Brightness":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
+                        /*slider1.setProgress(76);
                         slider2.setProgress(76);
                         slider3.setProgress(76);
-                        break;
+                       */ break;
                     case "Channel Mixer":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
+                       /* slider1.setProgress(76);
                         slider2.setProgress(76);
                         slider3.setProgress(76);
-                        break;
+                       */ break;
                     case "Blur":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
