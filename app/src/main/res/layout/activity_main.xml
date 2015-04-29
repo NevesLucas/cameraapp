@@ -7,21 +7,26 @@
     >
 
     <Button
-        android:layout_width="170dp"
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:text="Take a Photo"
         android:id="@+id/takePhoto"
+        android:background="@drawable/button_style"
+        android:textColor="@android:color/white"
         android:nestedScrollingEnabled="false"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/uploadPhoto"
         android:layout_alignTop="@+id/uploadPhoto"
         />
 
     <Button
-        android:layout_width="170dp"
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:text="Upload a photo"
         android:id="@+id/uploadPhoto"
+        android:background="@drawable/button_style"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
