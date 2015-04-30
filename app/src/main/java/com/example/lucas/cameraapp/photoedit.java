@@ -2,6 +2,7 @@ package com.example.lucas.cameraapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,13 +26,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Handler;
 
 /**
  * Created by Zeming Wu on 4/25/2015.
  */
 public class photoedit extends Filters {
+    public static final String TAG = photoedit.class.toString();
 
     private Bitmap image; // this is the bitmap file of the image that needs to be edited
     private float parameter1=1;
@@ -47,6 +49,7 @@ public class photoedit extends Filters {
     private Spinner spinner;
     private ArrayAdapter<CharSequence> adapter;
     private String selectedFilterName;
+    private Handler handler;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,10 +74,19 @@ public class photoedit extends Filters {
             } catch (IOException e){
                 e.printStackTrace();
             }
-        }else{
+        }else if (requestID == 2){
             // fot the selected image from gallery to display in the middle, ready for filters
+
+           Intent getSelectedImageIntent = getIntent();
+            String image_path = getSelectedImageIntent.getStringExtra("path");
+;
+            image = (Bitmap) BitmapFactory.decodeFile(image_path);
+            ImageView display = (ImageView) findViewById(R.id.photoInEditor);
+            display.setImageBitmap(image);
+
+        } else {
             Intent getSelectedImageIntent = getIntent();
-            image = (Bitmap) getSelectedImageIntent.getParcelableExtra("UserSelectedImage");
+            image = (Bitmap) getSelectedImageIntent.getParcelableExtra("DefaultImage");
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
         }
@@ -134,24 +146,15 @@ public class photoedit extends Filters {
                     case "Saturation":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        /*slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
-                       */ break;
+                        break;
                     case "Contrast and Brightness":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        /*slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
-                       */ break;
+                        break;
                     case "Channel Mixer":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                       /* slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
-                       */ break;
+                        break;
                     case "Blur":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
@@ -201,6 +204,9 @@ public class photoedit extends Filters {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedFilterName = spinner.getSelectedItem().toString();
+                if(selectedFilterName.equals("Blur")){
+                    slider2.setProgress(0);
+                }
                 showSliderBars(selectedFilterName);
             }
 
@@ -219,11 +225,10 @@ public class photoedit extends Filters {
                 //Calendar calendar = Calendar.getInstance();
                 //String fileName = Environment.getExternalStorageDirectory()+(calendar.getTimeInMillis()+".jpg");
                 storeImage(edited);
-
             }
         });
 
-// RESTORE Button
+// RESTORE Button: to display the original bitmap image
         Button restore = (Button) findViewById(R.id.buttonRestore);
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,11 +236,22 @@ public class photoedit extends Filters {
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
                 edited = image;
+                resetSliders();
             }
         });
+        // when RESTORE is hit, the slider bars should be reset as well
+        resetSliders();
+    }
 
-
-
+    //Resets sliders to default values. Zero for blur, 76 (half) for others
+    void resetSliders(){
+        if(selectedFilterName != null && selectedFilterName.equals("Blur")) {
+            slider2.setProgress(0);
+        } else {
+            slider2.setProgress(76);
+        }
+        slider1.setProgress(76);
+        slider3.setProgress(76);
     }
     String mCurrentPhotoPath;
 
@@ -300,12 +316,13 @@ public class photoedit extends Filters {
     //function to update photo gallery. In a separate thread
     private class UpdateGallery extends AsyncTask<File, Integer, Long> {
         protected Long doInBackground(File... photos) {
+            Log.d(TAG, "Do in background method called");
             //could put other code to save here
             MediaScannerConnection.scanFile(
                     photoedit.this, new String[] {photos.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
-
+                            Log.d(TAG, "Scan completed " + path);
                         }
                     });
             return null;
