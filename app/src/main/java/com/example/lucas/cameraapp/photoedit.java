@@ -67,7 +67,7 @@ public class photoedit extends Filters {
                 image = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),main.capturedImageUri);
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
-
+                edited=image;
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -83,6 +83,8 @@ public class photoedit extends Filters {
             image = (Bitmap) BitmapFactory.decodeFile(image_path);
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
+            edited=image;
+
 
         } else {
             Intent getSelectedImageIntent = getIntent();
