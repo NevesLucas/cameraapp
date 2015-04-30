@@ -68,7 +68,7 @@ public class photoedit extends Filters {
                 image = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),main.capturedImageUri);
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
-
+                edited=image;
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -81,6 +81,7 @@ public class photoedit extends Filters {
             image = (Bitmap) getSelectedImageIntent.getParcelableExtra("UserSelectedImage");
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
+            edited=image;
         } else {
             //Default image, which is the app logo, which can be edited if no photo is taken or uploaded
             Intent getSelectedImageIntent = getIntent();
