@@ -24,7 +24,6 @@ import java.util.Calendar;
 
 public class main extends Activity{
 
-
     public static final String TAG_PROCEED = "Proceed to next activity, takePhotoID is 1, uploadPhotoID is 2";
     private static final String CAMERA_LOG = "camera activated";
     protected static Uri capturedImageUri = null;
@@ -52,8 +51,10 @@ public class main extends Activity{
             }
         });
 
+        //Buttons
         Button uploadPhoto = (Button) findViewById(R.id.uploadPhoto);
         Button takePhoto = (Button) findViewById(R.id.takePhoto);
+        //Broadcasts intent to android system media store to access camera app
 
         // this is clicklistener in case user hit UPLOAD button
         uploadPhoto.setOnClickListener(new View.OnClickListener() {
@@ -65,10 +66,10 @@ public class main extends Activity{
                 startActivityForResult(uploadIntent,UPLOAD_PHOTO);
             }
         });
-
         takePhoto.setOnClickListener(cameraListener);
     }
 
+    //Called when "Take Photo" button pressed
     // this is clicklistener in case user hit TAKE PHOTO button
     private OnClickListener cameraListener = new OnClickListener() {
         @Override
@@ -76,11 +77,14 @@ public class main extends Activity{
             takePhoto(v);
         }
     };
+    //fuction that takes a photo
     // helper function for photo-taking: create files and store in disk
     private void takePhoto(View v){
         Calendar calendar = Calendar.getInstance();
+        //new jegp file created using the current tile
         File file = new File(Environment.getExternalStorageDirectory(), (calendar.getTimeInMillis()+".jpg"));
         if (!file.exists()){
+            //deletes file if it already exists and creates a new file
             try{
                 file.createNewFile();
             }catch (IOException e){
@@ -97,6 +101,7 @@ public class main extends Activity{
 
         MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
 
+        //starts editor activity with Uri of file created
         capturedImageUri = Uri.fromFile(file);
         // moving the image into next activity
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -104,9 +109,11 @@ public class main extends Activity{
         startActivityForResult(takePhotoIntent, TAKE_PHOTO);
     }
 
+    //called on result of intent passed to main activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        //passes take photo code to editor if activity request code is the take photo code
 
         // this is the case when user hit TAKE PHOTO button.
         if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO) {
@@ -116,9 +123,11 @@ public class main extends Activity{
 
         // this is the case when user hit UPLOAD button
         } else if (resultCode == Activity.RESULT_OK && requestCode == UPLOAD_PHOTO) {
+            //passes uploaded imge code to editor if request code is upload photo code
+            //gets Uri of selected photo from location from which intent was broadcast
             Uri selectedImage = intent.getData();
+            //generates string paths to images in the camera roll then moves through images using cursor
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
@@ -127,13 +136,13 @@ public class main extends Activity{
             String imagePath = cursor.getString(columnIndex);
             cursor.close();
             Intent passImageToNextActivity = new Intent(main.this, photoedit.class);
-
+            //generates bitmap from file path selected by user and passes to editor
+            Bitmap selectedBMP = BitmapFactory.decodeFile(picturePath);
             passImageToNextActivity.putExtra(TAG_PROCEED, UPLOAD_PHOTO);
-            passImageToNextActivity.putExtra("path",imagePath);
-
+            passImageToNextActivity.putExtra("UserSelectedImage", selectedBMP);
             startActivity(passImageToNextActivity);
-
         }
+        
     }
 
 
@@ -141,10 +150,7 @@ public class main extends Activity{
         return imagePath;
     }
 
-
-
-
-
+    //generated code for menu options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -152,6 +158,7 @@ public class main extends Activity{
         return true;
     }
 
+    //generated code for menu options
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
