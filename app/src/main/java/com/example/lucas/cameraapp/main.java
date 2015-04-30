@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,10 +46,8 @@ public class main extends Activity{
                 Intent nextActivity = new Intent(main.this, photoedit.class);
                 //decodes logo drawable as bitmap and passes to editor activity
                 Bitmap icon = BitmapFactory.decodeResource(main.this.getResources(), R.drawable.blurlogo1);
-
                 nextActivity.putExtra(TAG_PROCEED, DEFAULT);
                 nextActivity.putExtra("DefaultImage", icon);
-
                 startActivity(nextActivity);
             }
         });
@@ -95,6 +94,9 @@ public class main extends Activity{
                 e.printStackTrace();
             }
         }
+
+        MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
+
         capturedImageUri = Uri.fromFile(file);
         // moving the image into next activity
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
