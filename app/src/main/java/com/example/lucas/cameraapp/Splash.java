@@ -10,16 +10,15 @@ import android.widget.ImageView;
 /**
  * Created by Kyle Welch on 4/26/2015.
  */
-//Splash screen which appears when app loads single image of app logo that fills screen
 public class Splash extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-        //UI elements
+
         final ImageView iv = (ImageView) findViewById(R.id.imageView);
         final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fadein);
-        //starts animation
+
         iv.startAnimation(an);
         an.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -29,7 +28,7 @@ public class Splash extends Activity{
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                //transitions to main activity when animation finished
+
                 finish();
                 Intent i = new Intent(getBaseContext(),main.class);
                 startActivity(i);
