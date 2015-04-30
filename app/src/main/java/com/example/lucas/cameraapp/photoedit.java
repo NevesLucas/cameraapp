@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -68,8 +66,6 @@ public class photoedit extends Filters {
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
                 edited=image;
-
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e){
@@ -77,8 +73,7 @@ public class photoedit extends Filters {
             }
         }else if (requestID == 2){
             // fot the selected image from gallery to display in the middle, ready for filters
-
-           Intent getSelectedImageIntent = getIntent();
+            Intent getSelectedImageIntent = getIntent();
             String image_path = getSelectedImageIntent.getStringExtra("path");
 ;
             image = (Bitmap) BitmapFactory.decodeFile(image_path);
@@ -105,6 +100,8 @@ public class photoedit extends Filters {
 
             }
 
+            /*For different filter that's selected, update textView next to slider bars, indicating the intensity
+            and edit and show the image every time when user stops the slider*/
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 tv1.setText(String.valueOf((int)(parameter1))+"/" + slider1.getMax());
@@ -138,11 +135,12 @@ public class photoedit extends Filters {
 
             }
 
+            /*For different filter that's selected, update textView next to slider bars, indicating the intensity
+            and edit and show the image every time when user stops the slider*/
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 tv2.setText(String.valueOf((int)(parameter2))+"/" + slider2.getMax());
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
-               // Toast.makeText(getApplicationContext(), String.valueOf(parameter2) + "/" + slider2.getMax(), Toast.LENGTH_SHORT).show();
                 switch (selectedFilterName){
                     case "Saturation":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
@@ -166,7 +164,6 @@ public class photoedit extends Filters {
         });
 
 
-
 // SeekBar3, the slider, to get the integer as intensity parameter for filters
         slider3 = (SeekBar) findViewById(R.id.sliderBar3);
         slider3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -180,6 +177,8 @@ public class photoedit extends Filters {
 
             }
 
+            /*For different filter that's selected, update textView next to slider bars, indicating the intensity
+            and edit and show the image every time when user stops the slider*/
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 tv3.setText(String.valueOf((int) (parameter3)) + "/" + slider3.getMax());
@@ -196,7 +195,6 @@ public class photoedit extends Filters {
 
 
 // Spinner: choose filters
-
         spinner = (Spinner) findViewById(R.id.spinner);
         adapter = ArrayAdapter.createFromResource(this, R.array.filters, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -210,7 +208,6 @@ public class photoedit extends Filters {
                 }
                 showSliderBars(selectedFilterName);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -218,13 +215,11 @@ public class photoedit extends Filters {
         });
 
 
-// SAVE Button
+// SAVE Button, save edited/not edited image into SD card and appear in gallery
         Button save = (Button) findViewById(R.id.buttonSave);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Calendar calendar = Calendar.getInstance();
-                //String fileName = Environment.getExternalStorageDirectory()+(calendar.getTimeInMillis()+".jpg");
                 storeImage(edited);
             }
         });
@@ -268,25 +263,20 @@ public class photoedit extends Filters {
                 storageDir      /* directory */
         );
         MediaScannerConnection.scanFile(this, new String[]{image.getPath()}, new String[]{"image/jpeg"}, null);
-
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 // Helper function to save bitmap
     private boolean storeImage(Bitmap imageData) {
-
         //get path to external storage (SD card)
-     //   String iconsStoragePath = Environment.getExternalStorageDirectory() + "/myAppDir/myImages/";
         try {
             File sdIconStorageDir = storeImageHelp();
 
             //create storage directories, if they don't exist
-            //sdIconStorageDir.mkdirs();
-
+                 //sdIconStorageDir.mkdirs();
             //could put this code in the async task if task works
             FileOutputStream fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
-
             BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 
             //choose another format if PNG doesn't suit you
@@ -302,7 +292,6 @@ public class photoedit extends Filters {
 
             Toast.makeText(getApplicationContext(),"Image saved",Toast.LENGTH_LONG).show();
 
-
         } catch (FileNotFoundException e) {
             Log.w("TAG", "Error saving image file: " + e.getMessage());
             return false;
@@ -310,34 +299,33 @@ public class photoedit extends Filters {
             Log.w("TAG", "Error saving image file: " + e.getMessage());
             return false;
         }
-
         return true;
     }
 
-    
-    //function to update photo gallery. In a separate thread
-    private class UpdateGallery extends AsyncTask<File, Integer, Long> {
-        protected Long doInBackground(File... photos) {
-            Log.d(TAG, "Do in background method called");
-            //could put other code to save here
-            MediaScannerConnection.scanFile(
-                    photoedit.this, new String[] {photos.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.d(TAG, "Scan completed " + path);
-                        }
-                    });
-            return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(Long result) {
-
-        }
-    }
+//
+//    //function to update photo gallery. In a separate thread
+//    private class UpdateGallery extends AsyncTask<File, Integer, Long> {
+//        protected Long doInBackground(File... photos) {
+//            Log.d(TAG, "Do in background method called");
+//            //could put other code to save here
+//            MediaScannerConnection.scanFile(
+//                    photoedit.this, new String[] {photos.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+//                        @Override
+//                        public void onScanCompleted(String path, Uri uri) {
+//                            Log.d(TAG, "Scan completed " + path);
+//                        }
+//                    });
+//            return null;
+//        }
+//
+//        protected void onProgressUpdate(Integer... progress) {
+//
+//        }
+//
+//        protected void onPostExecute(Long result) {
+//
+//        }
+//    }
 
 // helper function to hide/show slider bars
     public void showSliderBars(String filterID){
@@ -392,6 +380,7 @@ public class photoedit extends Filters {
                 break;
         }
     }
+    // Hide not-in-use slider bars, to make UI more friendly
     public void hide(){
         findViewById(R.id.sliderBar1).setVisibility(View.INVISIBLE);
         findViewById(R.id.tv_sliderBar1).setVisibility(View.INVISIBLE);
