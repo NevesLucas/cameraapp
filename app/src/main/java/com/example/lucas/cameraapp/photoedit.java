@@ -2,6 +2,7 @@ package com.example.lucas.cameraapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -74,10 +76,14 @@ public class photoedit extends Filters {
             }
         }else if (requestID == 2){
             // fot the selected image from gallery to display in the middle, ready for filters
-            Intent getSelectedImageIntent = getIntent();
-            image = (Bitmap) getSelectedImageIntent.getParcelableExtra("UserSelectedImage");
+
+           Intent getSelectedImageIntent = getIntent();
+            String image_path = getSelectedImageIntent.getStringExtra("path");
+;
+            image = (Bitmap) BitmapFactory.decodeFile(image_path);
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
+
         } else {
             Intent getSelectedImageIntent = getIntent();
             image = (Bitmap) getSelectedImageIntent.getParcelableExtra("DefaultImage");
@@ -222,7 +228,7 @@ public class photoedit extends Filters {
             }
         });
 
-// RESTORE Button
+// RESTORE Button: to display the original bitmap image
         Button restore = (Button) findViewById(R.id.buttonRestore);
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,9 +239,8 @@ public class photoedit extends Filters {
                 resetSliders();
             }
         });
-
-       resetSliders();
-
+        // when RESTORE is hit, the slider bars should be reset as well
+        resetSliders();
     }
 
     //Resets sliders to default values. Zero for blur, 76 (half) for others
