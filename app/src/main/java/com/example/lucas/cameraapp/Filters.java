@@ -27,8 +27,7 @@ public class Filters extends Activity {
 
         return bitmap;
     }
-    //creates saturation filter where S is between 0 and 1.
-//EXPERIMENTAL may give unexpected results
+    //creates saturation filter where S is between 0 and 1. very sensitive to change
     public Bitmap SaturationFilter(Bitmap original, float S) {
 
 
@@ -50,7 +49,7 @@ public class Filters extends Activity {
         return this.process(original,Cmat);
     }
 
-    //EXPERIMENTAL RGB should be between 0 and 1
+    // RGB channel mixer
     public Bitmap ChannelMixer(Bitmap original,float R, float G, float B) {
         R=R/75.0f;
         G=G/75.0f;
@@ -116,7 +115,7 @@ public class Filters extends Activity {
         return this.process(original,colorMatrix);
     }
 
-    //blurring effect input radius for intensity of blurring effect
+    //Blurring effect input radius for intensity of blurring effect uses scriptintrinsic blur
     protected Bitmap Blur(Bitmap original, int multi) {
        Bitmap temp=original;
           multi = multi/5;
