@@ -266,6 +266,7 @@ public class photoedit extends Filters {
                 ".JPG",         /* suffix */
                 storageDir      /* directory */
         );
+        MediaScannerConnection.scanFile(this, new String[]{image.getPath()}, new String[]{"image/jpeg"}, null);
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
@@ -296,7 +297,7 @@ public class photoedit extends Filters {
             fileOutputStream.close();
 
             //Executes async task
-            new UpdateGallery().execute(sdIconStorageDir);
+            //new UpdateGallery().execute(sdIconStorageDir);
 
             Toast.makeText(getApplicationContext(),"Image saved",Toast.LENGTH_LONG).show();
 
