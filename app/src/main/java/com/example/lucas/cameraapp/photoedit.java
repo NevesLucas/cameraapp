@@ -2,6 +2,8 @@ package com.example.lucas.cameraapp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,20 +18,20 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Handler;
 
 /**
  * Created by Zeming Wu on 4/25/2015.
  */
 public class photoedit extends Filters {
+    public static final String TAG = photoedit.class.toString();
 
     private Bitmap image; // this is the bitmap file of the image that needs to be edited
     private float parameter1=1;
@@ -45,6 +47,7 @@ public class photoedit extends Filters {
     private Spinner spinner;
     private ArrayAdapter<CharSequence> adapter;
     private String selectedFilterName;
+    private Handler handler;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +72,15 @@ public class photoedit extends Filters {
             } catch (IOException e){
                 e.printStackTrace();
             }
-        }else{
+        }else if (requestID == 2){
             // fot the selected image from gallery to display in the middle, ready for filters
             Intent getSelectedImageIntent = getIntent();
             image = (Bitmap) getSelectedImageIntent.getParcelableExtra("UserSelectedImage");
+            ImageView display = (ImageView) findViewById(R.id.photoInEditor);
+            display.setImageBitmap(image);
+        } else {
+            Intent getSelectedImageIntent = getIntent();
+            image = (Bitmap) getSelectedImageIntent.getParcelableExtra("DefaultImage");
             ImageView display = (ImageView) findViewById(R.id.photoInEditor);
             display.setImageBitmap(image);
         }
@@ -132,23 +140,14 @@ public class photoedit extends Filters {
                     case "Saturation":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
                         break;
                     case "Contrast and Brightness":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
                         break;
                     case "Channel Mixer":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
                         display.setImageBitmap(edited);
-                        slider1.setProgress(76);
-                        slider2.setProgress(76);
-                        slider3.setProgress(76);
                         break;
                     case "Blur":
                         edited = selectFilters(parameter1,parameter2,parameter3,image);
@@ -199,6 +198,9 @@ public class photoedit extends Filters {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedFilterName = spinner.getSelectedItem().toString();
+                if(selectedFilterName.equals("Blur")){
+                    slider2.setProgress(0);
+                }
                 showSliderBars(selectedFilterName);
             }
 
@@ -217,7 +219,6 @@ public class photoedit extends Filters {
                 //Calendar calendar = Calendar.getInstance();
                 //String fileName = Environment.getExternalStorageDirectory()+(calendar.getTimeInMillis()+".jpg");
                 storeImage(edited);
-
             }
         });
 
@@ -229,11 +230,23 @@ public class photoedit extends Filters {
                 ImageView display = (ImageView) findViewById(R.id.photoInEditor);
                 display.setImageBitmap(image);
                 edited = image;
+                resetSliders();
             }
         });
 
+       resetSliders();
 
+    }
 
+    //Resets sliders to default values. Zero for blur, 76 (half) for others
+    void resetSliders(){
+        if(selectedFilterName != null && selectedFilterName.equals("Blur")) {
+            slider2.setProgress(0);
+        } else {
+            slider2.setProgress(76);
+        }
+        slider1.setProgress(76);
+        slider3.setProgress(76);
     }
     String mCurrentPhotoPath;
 
@@ -259,13 +272,13 @@ public class photoedit extends Filters {
         //get path to external storage (SD card)
      //   String iconsStoragePath = Environment.getExternalStorageDirectory() + "/myAppDir/myImages/";
         try {
-            File sdIconStorageDir =storeImageHelp();
+            File sdIconStorageDir = storeImageHelp();
 
-        //create storage directories, if they don't exist
-            sdIconStorageDir.mkdirs();
+            //create storage directories, if they don't exist
+            //sdIconStorageDir.mkdirs();
 
-            String filePath = mCurrentPhotoPath;
-            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+            //could put this code in the async task if task works
+            FileOutputStream fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
 
             BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 
@@ -276,7 +289,13 @@ public class photoedit extends Filters {
             bos.close();
             fileOutputStream.flush();
             fileOutputStream.close();
+
+            //Executes async task
+            new UpdateGallery().execute(sdIconStorageDir);
+
             Toast.makeText(getApplicationContext(),"Image saved",Toast.LENGTH_LONG).show();
+
+
         } catch (FileNotFoundException e) {
             Log.w("TAG", "Error saving image file: " + e.getMessage());
             return false;
@@ -288,7 +307,30 @@ public class photoedit extends Filters {
         return true;
     }
 
+    //TODO test this method
+    //function to update photo gallery. In a separate thread
+    private class UpdateGallery extends AsyncTask<File, Integer, Long> {
+        protected Long doInBackground(File... photos) {
+            Log.d(TAG, "Do in background method called");
+            //could put other code to save here
+            MediaScannerConnection.scanFile(
+                    photoedit.this, new String[] {photos.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.d(TAG, "Scan completed " + path);
+                        }
+                    });
+            return null;
+        }
 
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+        protected void onPostExecute(Long result) {
+
+        }
+    }
 
 // helper function to hide/show slider bars
     public void showSliderBars(String filterID){

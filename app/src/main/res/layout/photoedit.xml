@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_margin="8dp">
 
     <ImageView
         android:id = "@+id/photoInEditor"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:scaleType="fitCenter"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        />
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="Displays image to be edited"
+        android:layout_alignTop="@+id/buttonSave"
+        android:layout_alignBottom="@+id/spinner"
+        android:scaleType="fitCenter"/>
 
     <SeekBar
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:id="@+id/sliderBar1"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="64dp"
         android:layout_marginBottom="90dp"
         android:max="@integer/abc_config_activityShortDur"
         android:indeterminate="false"
@@ -25,13 +25,15 @@
         android:visibility="invisible"/>
 
     <TextView
+        android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0/150"
         android:id="@+id/tv_sliderBar1"
         android:textSize="15sp"
-        android:layout_marginLeft="35dp"
+        android:textColor="@color/abc_primary_text_material_light"
+        android:layout_marginStart="16dp"
         android:layout_alignBottom="@+id/sliderBar1"
         android:visibility="invisible"/>
 
@@ -40,7 +42,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/sliderBar2"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="64dp"
         android:layout_marginBottom="60dp"
         android:max="@integer/abc_config_activityShortDur"
         android:indeterminate="false"
@@ -48,13 +50,15 @@
         android:visibility="invisible"/>
 
     <TextView
+        android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0/150"
         android:id="@+id/tv_sliderBar2"
         android:textSize="15sp"
-        android:layout_marginLeft="35dp"
+        android:textColor="@color/abc_primary_text_material_light"
+        android:layout_marginStart="16dp"
         android:layout_alignBottom="@+id/sliderBar2"
         android:visibility="invisible"/>
 
@@ -64,105 +68,59 @@
         android:id="@+id/sliderBar3"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="64dp"
         android:max="@integer/abc_config_activityShortDur"
         android:indeterminate="false"
         android:progress="@integer/abc_max_action_buttons"
         android:visibility="invisible"/>
 
     <TextView
+        android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/abc_primary_text_material_light"
         android:text="0/150"
         android:id="@+id/tv_sliderBar3"
         android:textSize="15sp"
-        android:layout_marginLeft="35dp"
+        android:layout_marginStart="16dp"
         android:layout_alignBottom="@+id/sliderBar3"
         android:visibility="invisible"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="85dp"
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:text="Save"
+        android:background="@drawable/button_style"
+        android:textColor="@android:color/white"
         android:id="@+id/buttonSave"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_alignParentEnd="true"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="85dp"
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:text="Restore"
+        android:background="@drawable/button_style"
+        android:textColor="@android:color/white"
         android:id="@+id/buttonRestore"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"/>
-
+        android:layout_alignParentStart="true"/>
 
     <Spinner
-        android:layout_width="240dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
         android:prompt="@string/promptSpinner"
         android:gravity="center_horizontal"
         android:textAlignment="gravity"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="128dp"
         android:spinnerMode="dropdown" />
-
-
-    <!--<HorizontalScrollView-->
-        <!--android:layout_width="380dp"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:id="@+id/horizontalScrollView"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginBottom="33dp"-->
-        <!-->-->
-        <!--<LinearLayout-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width = "wrap_content"-->
-            <!-->-->
-            <!--<RadioGroup-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal">-->
-                <!--<RadioButton-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id = "@+id/buttonBrightness"-->
-                    <!--android:text="Brightness"-->
-                    <!--android:layout_margin="@dimen/abc_button_padding_horizontal_material"-->
-                    <!--android:onClick="selectFilters"/>-->
-                <!--<RadioButton-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id = "@+id/buttonSaturationFilter"-->
-                    <!--android:text="Saturation"-->
-                    <!--android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"-->
-                    <!--android:onClick="selectFilters"/>-->
-                <!--<RadioButton-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id = "@+id/buttonChannelMixer"-->
-                    <!--android:text="Channel Mixer"-->
-                    <!--android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"-->
-                    <!--android:onClick="selectFilters"/>-->
-                <!--<RadioButton-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id = "@+id/buttonBlur"-->
-                    <!--android:text="Blur"-->
-                    <!--android:layout_margin="@dimen/abc_action_bar_overflow_padding_start_material"-->
-                    <!--android:onClick="selectFilters"/>-->
-            <!--</RadioGroup>-->
-        <!--</LinearLayout>-->
-
-    <!--</HorizontalScrollView>-->
-
 
 </RelativeLayout>

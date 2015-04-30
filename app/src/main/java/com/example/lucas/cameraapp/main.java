@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,11 +29,26 @@ public class main extends Activity{
     protected static Uri capturedImageUri = null;
     private static int TAKE_PHOTO = 1;
     private static int UPLOAD_PHOTO = 2;
+    private static int DEFAULT = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView logo = (ImageView) findViewById(R.id.imageView2);
+        //this click listener will pass the logo image to the editor if no image is uploaded or taken
+        //useful for examples, debugging, and running in emulator rather than on device
+        logo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivity = new Intent(main.this, photoedit.class);
+                //decodes logo drawable as bitmap and passes to editor activity
+                Bitmap icon = BitmapFactory.decodeResource(main.this.getResources(), R.drawable.blurlogo1);
+                nextActivity.putExtra(TAG_PROCEED, DEFAULT);
+                nextActivity.putExtra("DefaultImage", icon);
+                startActivity(nextActivity);
+            }
+        });
 
         Button uploadPhoto = (Button) findViewById(R.id.uploadPhoto);
         Button takePhoto = (Button) findViewById(R.id.takePhoto);
@@ -109,7 +126,7 @@ public class main extends Activity{
 
 
                 Bitmap selectedBMP = BitmapFactory.decodeFile(picturePath);
-                passImageToNextActivity.putExtra(TAG_PROCEED,UPLOAD_PHOTO);
+                passImageToNextActivity.putExtra(TAG_PROCEED, UPLOAD_PHOTO);
                 passImageToNextActivity.putExtra("UserSelectedImage", selectedBMP);
                 startActivity(passImageToNextActivity);
 
