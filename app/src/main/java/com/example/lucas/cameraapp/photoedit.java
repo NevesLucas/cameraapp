@@ -248,6 +248,9 @@ public class photoedit extends Filters {
         }
         slider1.setProgress(76);
         slider3.setProgress(76);
+        tv1.setText(slider1.getProgress() + "/" + slider1.getMax());
+        tv2.setText(slider2.getProgress() +"/" + slider1.getMax());
+        tv3.setText(slider3.getProgress() + "/" + slider1.getMax());
     }
     String mCurrentPhotoPath;
 
