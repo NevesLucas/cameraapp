@@ -38,8 +38,8 @@ public class main extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ImageView logo = (ImageView) findViewById(R.id.imageView2);
-        //this click listener will pass the logo image to the editor if no image is uploaded or taken
-        //useful for examples, debugging, and running in emulator rather than on device
+        /*this click listener will pass the logo image to the editor if no image is uploaded or taken
+        useful for examples, debugging, and running in emulator rather than on device*/
         logo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,9 +95,10 @@ public class main extends Activity{
             }
         }
 
+        // show the taken photo in phone gallery
         MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
-
         capturedImageUri = Uri.fromFile(file);
+
         // moving the image into next activity
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
@@ -118,11 +119,9 @@ public class main extends Activity{
         } else if (resultCode == Activity.RESULT_OK && requestCode == UPLOAD_PHOTO) {
             Uri selectedImage = intent.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String imagePath = cursor.getString(columnIndex);
             cursor.close();
@@ -135,12 +134,6 @@ public class main extends Activity{
 
         }
     }
-
-
-    public String getImagePath(){
-        return imagePath;
-    }
-
 
 
 
