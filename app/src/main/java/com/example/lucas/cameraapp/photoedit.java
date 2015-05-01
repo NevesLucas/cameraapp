@@ -243,11 +243,15 @@ public class photoedit extends Filters {
     void resetSliders(){
         if(selectedFilterName != null && selectedFilterName.equals("Blur")) {
             slider2.setProgress(0);
+            tv2.setText(slider2.getProgress() + "/" + slider2.getMax());
         } else {
             slider2.setProgress(76);
+            tv2.setText(slider2.getProgress() + "/" + slider2.getMax());
         }
         slider1.setProgress(76);
         slider3.setProgress(76);
+        tv1.setText(slider1.getProgress() + "/" + slider1.getMax());
+        tv3.setText(slider3.getProgress() + "/" + slider3.getMax());
     }
     String mCurrentPhotoPath;
 
